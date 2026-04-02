@@ -1,236 +1,828 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Disney Day Guide — Jack & Dillon's Family Adventure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: var(--font-sans); }
-.wrap { padding: 1rem 0; }
-.park-header { font-size: 20px; font-weight: 500; color: var(--color-text-primary); margin: 1.5rem 0 0.5rem; padding-bottom: 6px; border-bottom: 2px solid var(--color-border-secondary); }
-.filter-bar { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; }
-.filter-bar button { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-secondary); cursor: pointer; transition: all 0.15s; }
-.filter-bar button.active { background: #185FA5; color: #fff; border-color: #185FA5; }
-.filter-bar button:hover:not(.active) { background: var(--color-background-secondary); }
-.land-header { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); background: var(--color-background-secondary); padding: 6px 10px; border-radius: 6px; margin: 12px 0 4px; letter-spacing: 0.04em; text-transform: uppercase; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
-th { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-align: left; padding: 6px 8px; border-bottom: 0.5px solid var(--color-border-tertiary); }
-td { padding: 7px 8px; border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-primary); vertical-align: top; line-height: 1.4; }
-tr:last-child td { border-bottom: none; }
-tr.hidden { display: none; }
-.type-badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 500; }
-.type-Ride { background: #E6F1FB; color: #0C447C; }
-.type-Show { background: #EEEDFE; color: #3C3489; }
-.type-Play { background: #EAF3DE; color: #27500A; }
-.type-Dining { background: #FAEEDA; color: #633806; }
-.check { color: #1D9E75; font-size: 14px; }
-.cross { color: #E24B4A; font-size: 14px; }
-.note { font-size: 10px; color: var(--color-text-secondary); display: block; margin-top: 1px; }
-.stars { color: #EF9F27; font-size: 13px; letter-spacing: 1px; }
-.ll-badge { display: inline-block; font-size: 10px; padding: 2px 6px; border-radius: 8px; background: #E6F1FB; color: #0C447C; font-weight: 500; }
-.ll-badge.mo { background: #FAEEDA; color: #633806; }
-.ll-badge.none { background: var(--color-background-secondary); color: var(--color-text-secondary); }
-.col-name { width: 22%; }
-.col-type { width: 10%; }
-.col-j { width: 13%; }
-.col-d { width: 13%; }
-.col-star { width: 11%; }
-.col-ll { width: 17%; }
-.summary-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
-.stat { font-size: 12px; color: var(--color-text-secondary); background: var(--color-background-secondary); padding: 5px 10px; border-radius: 6px; }
-.stat b { color: var(--color-text-primary); }
-</style>
+  :root {
+    --dca: #E8401C;
+    --dl:  #1A3A6B;
+    --gold: #D4A017;
+    --gold-lt: #F5E8C0;
+    --green: #1B7A4A;
+    --green-lt: #D6F0E3;
+    --red: #C0392B;
+    --red-lt: #FDECEA;
+    --gray-0: #FAFAF8;
+    --gray-1: #F0EFE9;
+    --gray-2: #E2E0D8;
+    --gray-3: #B8B5A8;
+    --gray-4: #6E6B60;
+    --gray-5: #2C2A24;
+    --ll-bg: #E8F0FB;
+    --ll-txt: #1A3A6B;
+    --mo-bg: #FEF3DC;
+    --mo-txt: #8A5500;
+    --ride-bg: #E8F0FB;  --ride-txt: #1A3A6B;
+    --show-bg: #EEE8FC;  --show-txt: #3B1F8C;
+    --play-bg: #D6F0E3;  --play-txt: #0F5C35;
+    --dining-bg: #FEF3DC; --dining-txt: #7A4800;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
 
-<div class="wrap">
-<div class="filter-bar" id="filters">
-  <button class="active" data-f="all">All</button>
-  <button data-f="Ride">Rides</button>
-  <button data-f="Show">Shows</button>
-  <button data-f="Play">Play Areas</button>
-  <button data-f="Dining">Dining</button>
-  <button data-f="both">Both kids ✓</button>
-  <button data-f="ll">Lightning Lane</button>
-  <button data-f="5star">5-star picks</button>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-0);
+    color: var(--gray-5);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .hero {
+    background: var(--gray-5);
+    color: #fff;
+    padding: 3rem 2rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 60% 80% at 90% 50%, rgba(26,58,107,0.6) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 60% at 10% 80%, rgba(232,64,28,0.4) 0%, transparent 70%);
+  }
+  .hero-inner { position: relative; max-width: 1100px; margin: 0 auto; }
+  .hero-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+  }
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--gold); }
+  .hero-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  .hero-sub span { display: flex; align-items: center; gap: 6px; }
+  .hero-sub span::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+
+  /* ── Layout ── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* ── Filter Bar ── */
+  .filters-wrap {
+    background: #fff;
+    border: 1px solid var(--gray-2);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .filters-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray-3);
+    margin-right: 4px;
+    flex-shrink: 0;
+  }
+  .filter-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--gray-2);
+    background: var(--gray-0);
+    color: var(--gray-4);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .filter-btn:hover { border-color: var(--gray-3); color: var(--gray-5); background: var(--gray-1); }
+  .filter-btn.active { background: var(--gray-5); color: #fff; border-color: var(--gray-5); }
+  .filter-btn.active.dca { background: var(--dca); border-color: var(--dca); }
+  .filter-btn.active.dl  { background: var(--dl);  border-color: var(--dl);  }
+
+  /* ── Summary Pills ── */
+  .summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+  }
+  .summary-pill {
+    font-size: 12px;
+    color: var(--gray-4);
+    background: #fff;
+    border: 1px solid var(--gray-2);
+    border-radius: 20px;
+    padding: 4px 12px;
+  }
+  .summary-pill b { color: var(--gray-5); }
+
+  /* ── Park Section ── */
+  .park-section { margin-bottom: 3rem; }
+  .park-heading {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #fff;
+    padding: 0.9rem 1.25rem;
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .park-heading.dca { background: var(--dca); }
+  .park-heading.dl  { background: var(--dl); }
+  .park-heading .park-icon { font-size: 1.4rem; }
+
+  /* ── Land Block ── */
+  .land-block { margin-bottom: 1.25rem; }
+  .land-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+    padding: 0 0.5rem;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .land-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gray-2);
+  }
+
+  /* ── Table ── */
+  .table-wrap {
+    background: #fff;
+    border: 1px solid var(--gray-2);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    table-layout: fixed;
+  }
+  thead tr {
+    background: var(--gray-1);
+    border-bottom: 1px solid var(--gray-2);
+  }
+  th {
+    padding: 9px 12px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+    white-space: nowrap;
+  }
+  td {
+    padding: 11px 12px;
+    border-bottom: 1px solid var(--gray-1);
+    vertical-align: top;
+    line-height: 1.45;
+    color: var(--gray-5);
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--gray-0); }
+  tbody tr.hidden { display: none; }
+
+  .col-name { width: 26%; }
+  .col-type { width: 11%; }
+  .col-jack { width: 16%; }
+  .col-dill { width: 16%; }
+  .col-star { width: 10%; }
+  .col-ll   { width: 21%; }
+
+  .attr-name { font-weight: 600; font-size: 13px; color: var(--gray-5); }
+  .attr-sub  { font-size: 11px; color: var(--gray-4); margin-top: 2px; }
+
+  /* ── Badges ── */
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .badge-Ride   { background: var(--ride-bg);   color: var(--ride-txt); }
+  .badge-Show   { background: var(--show-bg);   color: var(--show-txt); }
+  .badge-Play   { background: var(--play-bg);   color: var(--play-txt); }
+  .badge-Dining { background: var(--dining-bg); color: var(--dining-txt); }
+
+  .check-wrap { display: flex; flex-direction: column; gap: 2px; }
+  .check { font-size: 15px; font-weight: 700; }
+  .check.yes { color: var(--green); }
+  .check.no  { color: var(--red); }
+  .check-note { font-size: 10px; color: var(--gray-4); line-height: 1.3; }
+
+  .stars-wrap { display: flex; gap: 2px; flex-wrap: wrap; }
+  .star { width: 13px; height: 13px; }
+  .star.on  path { fill: var(--gold); }
+  .star.off path { fill: var(--gray-2); }
+
+  .ll-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    margin-bottom: 3px;
+  }
+  .ll-tag.llmp    { background: var(--ll-bg); color: var(--ll-txt); }
+  .ll-tag.mo      { background: var(--mo-bg); color: var(--mo-txt); }
+  .ll-tag.walkup  { background: var(--gray-1); color: var(--gray-4); }
+  .ll-sub { font-size: 10px; color: var(--gray-4); margin-top: 2px; display: block; }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+    font-size: 12px;
+    color: var(--gray-4);
+    align-items: center;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+
+  /* ── No results ── */
+  .no-results {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--gray-3);
+    font-size: 14px;
+  }
+  .no-results span { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+
+  /* ── Responsive ── */
+  @media (max-width: 700px) {
+    .col-jack, .col-dill { width: 14%; }
+    .col-name { width: 24%; }
+    th, td { padding: 8px 8px; }
+    .attr-name { font-size: 12px; }
+    .hero { padding: 2rem 1.25rem; }
+  }
+  @media (max-width: 520px) {
+    table { font-size: 12px; }
+    .col-ll { display: none; }
+    .col-ll-th { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Family Day Guide</div>
+    <h1>Jack &amp; Dillon's<br><em>Disney Adventure</em></h1>
+    <div class="hero-sub">
+      <span>Jack · Age 6.5 · 48"</span>
+      <span>Dillon · Age 4 · 38"</span>
+      <span>2 Adults</span>
+      <span>Lightning Lane Multi Pass</span>
+      <span>California Adventure → Disneyland</span>
+    </div>
+  </div>
 </div>
-<div class="summary-bar" id="summary"></div>
-<div id="content"></div>
+
+<div class="container">
+
+  <div class="filters-wrap">
+    <span class="filters-label">Filter</span>
+    <button class="filter-btn active" data-f="all">All Attractions</button>
+    <button class="filter-btn" data-f="Ride">Rides</button>
+    <button class="filter-btn" data-f="Show">Shows</button>
+    <button class="filter-btn" data-f="Play">Play Areas</button>
+    <button class="filter-btn" data-f="Dining">Dining</button>
+    <button class="filter-btn" data-f="both">Both Kids ✓</button>
+    <button class="filter-btn" data-f="ll">⚡ Lightning Lane</button>
+    <button class="filter-btn" data-f="5star">★ 5-Star Picks</button>
+  </div>
+
+  <div class="summary" id="summary"></div>
+
+  <div class="legend">
+    <span class="legend-item"><span class="legend-dot" style="background:var(--ride-bg);border:1px solid #93b4df;"></span> Ride</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--show-bg);border:1px solid #b9a7e8;"></span> Show</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--play-bg);border:1px solid #7ec9a4;"></span> Play Area</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--dining-bg);border:1px solid #dbb96a;"></span> Dining</span>
+    <span class="legend-item" style="color:var(--green);">✔ Eligible</span>
+    <span class="legend-item" style="color:var(--red);">✗ Not eligible</span>
+    <span class="legend-item"><span style="font-size:10px;background:var(--ll-bg);color:var(--ll-txt);font-weight:600;padding:2px 6px;border-radius:4px;">⚡ LLMP</span> = Lightning Lane Multi Pass</span>
+    <span class="legend-item"><span style="font-size:10px;background:var(--mo-bg);color:var(--mo-txt);font-weight:600;padding:2px 6px;border-radius:4px;">📱 MO</span> = Mobile Order</span>
+  </div>
+
+  <div id="parks"></div>
 </div>
 
 <script>
-const data = [
-  {park:"California Adventure", land:"Avengers Campus", name:"WEB SLINGERS: A Spider-Man Adventure", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:5, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"California Adventure", land:"Avengers Campus", name:"Guardians of the Galaxy – Mission: BREAKOUT!", type:"Ride", jack:true, jackNote:"✓ 40\"+ (48\")", dillon:true, dillonNote:"✓ 40\"+ (38\")", stars:4, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"California Adventure", land:"Avengers Campus", name:"Avengers Assemble: Live Action Show", type:"Show", jack:true, jackNote:"✓ All ages", dillon:true, dillonNote:"✓ All ages", stars:4, ll:"none", llNote:"Walk-up"},
-  {park:"California Adventure", land:"Avengers Campus", name:"Meet the Avengers (Characters)", type:"Show", jack:true, jackNote:"✓ All ages", dillon:true, dillonNote:"✓ All ages", stars:5, ll:"none", llNote:"Walk-up queue"},
-  {park:"California Adventure", land:"Cars Land", name:"Radiator Springs Racers", type:"Ride", jack:true, jackNote:"✓ 40\"+ (48\")", dillon:true, dillonNote:"✓ 40\"+ (38\")", stars:5, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"California Adventure", land:"Cars Land", name:"Mater's Junkyard Jamboree", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:5, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"California Adventure", land:"Cars Land", name:"Luigi's Rollickin' Roadsters", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:4, ll:"none", llNote:"Walk-up (no LLMP)"},
-  {park:"California Adventure", land:"Cars Land", name:"Cozy Cone Motel", type:"Dining", jack:true, jackNote:"", dillon:true, dillonNote:"", stars:4, ll:"MO", llNote:"Mobile Order"},
-  {park:"California Adventure", land:"Cars Land", name:"Flo's V8 Café", type:"Dining", jack:true, jackNote:"", dillon:true, dillonNote:"", stars:3, ll:"MO", llNote:"Mobile Order"},
-  {park:"California Adventure", land:"Pixar Pier", name:"Incredicoaster", type:"Ride", jack:true, jackNote:"✓ 48\"+ (exactly 48\")", dillon:false, dillonNote:"✗ Need 48\" (38\")", stars:3, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"California Adventure", land:"Pixar Pier", name:"Jessie's Critter Carousel", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:3, ll:"none", llNote:"Walk-up"},
-  {park:"California Adventure", land:"Pixar Pier", name:"Inside Out Emotional Whirlwind", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:4, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"California Adventure", land:"Pixar Pier", name:"Toy Story Midway Mania!", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:5, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"California Adventure", land:"Pixar Pier", name:"Pixar Pal-A-Round – Swinging", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:2, ll:"none", llNote:"Walk-up"},
-  {park:"California Adventure", land:"Pixar Pier", name:"Pixar Pal-A-Round – Non-Swinging", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:3, ll:"none", llNote:"Walk-up"},
-  {park:"California Adventure", land:"Pixar Pier", name:"Angry Dogs (Midway Games)", type:"Play", jack:true, jackNote:"✓ All ages", dillon:true, dillonNote:"✓ All ages", stars:2, ll:"none", llNote:"N/A"},
-  {park:"California Adventure", land:"Pixar Pier", name:"Lamplight Lounge (walk-up bar area)", type:"Dining", jack:true, jackNote:"", dillon:true, dillonNote:"", stars:3, ll:"none", llNote:"Walk-up only"},
-  {park:"California Adventure", land:"Grizzly Peak", name:"Soarin' Around the World", type:"Ride", jack:true, jackNote:"✓ 40\"+ (48\")", dillon:true, dillonNote:"✓ 40\"+ (38\")", stars:5, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"California Adventure", land:"Grizzly Peak", name:"Grizzly River Run", type:"Ride", jack:true, jackNote:"✓ 42\"+ (48\")", dillon:false, dillonNote:"✗ Need 42\" (38\")", stars:3, ll:"none", llNote:"Walk-up"},
-  {park:"California Adventure", land:"Grizzly Peak", name:"Redwood Creek Challenge Trail", type:"Play", jack:true, jackNote:"✓ All ages", dillon:true, dillonNote:"✓ All ages", stars:4, ll:"none", llNote:"N/A"},
-  {park:"California Adventure", land:"Hollywood Land", name:"Mickey's PhilharMagic", type:"Show", jack:true, jackNote:"✓ All ages", dillon:true, dillonNote:"✓ All ages", stars:4, ll:"none", llNote:"Walk-up"},
-  {park:"California Adventure", land:"Hollywood Land", name:"Monsters, Inc. Mike & Sulley to the Rescue!", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:3, ll:"none", llNote:"Walk-up"},
-  {park:"California Adventure", land:"Hollywood Land", name:"Hyperion Theater (seasonal shows)", type:"Show", jack:true, jackNote:"✓ All ages", dillon:true, dillonNote:"✓ All ages", stars:3, ll:"none", llNote:"Walk-up"},
-  {park:"California Adventure", land:"Hollywood Land", name:"Award Wieners", type:"Dining", jack:true, jackNote:"", dillon:true, dillonNote:"", stars:3, ll:"MO", llNote:"Mobile Order"},
-  {park:"California Adventure", land:"Buena Vista Street", name:"Carthay Circle Lounge (walk-up)", type:"Dining", jack:true, jackNote:"", dillon:true, dillonNote:"", stars:3, ll:"none", llNote:"Walk-up"},
-  {park:"California Adventure", land:"Buena Vista Street", name:"Fiddler, Fifer & Practical Café", type:"Dining", jack:true, jackNote:"", dillon:true, dillonNote:"", stars:3, ll:"MO", llNote:"Mobile Order"},
-  {park:"California Adventure", land:"Pacific Wharf", name:"Pacific Wharf Café", type:"Dining", jack:true, jackNote:"", dillon:true, dillonNote:"", stars:3, ll:"MO", llNote:"Mobile Order"},
-  {park:"California Adventure", land:"Pacific Wharf", name:"Lucky Fortune Cookery", type:"Dining", jack:true, jackNote:"", dillon:true, dillonNote:"", stars:3, ll:"MO", llNote:"Mobile Order"},
+const DATA = [
+  // ── California Adventure ──────────────────────────────────────────
+  {park:"California Adventure", land:"Avengers Campus",
+   name:"WEB SLINGERS: A Spider-Man Adventure", type:"Ride",
+   jack:true,  jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:5, ll:"llmp", llNote:"Lightning Lane Multi Pass"},
+  {park:"California Adventure", land:"Avengers Campus",
+   name:"Guardians of the Galaxy – Mission: BREAKOUT!", type:"Ride",
+   jack:true,  jackNote:"40\"+ req · Jack: 48\" ✓",
+   dillon:true, dillonNote:"40\"+ req · Dillon: 38\" ✓",
+   stars:4, ll:"llmp", llNote:"Lightning Lane Multi Pass"},
+  {park:"California Adventure", land:"Avengers Campus",
+   name:"Avengers Assemble: Live Action Show", type:"Show",
+   jack:true, jackNote:"All ages",
+   dillon:true, dillonNote:"All ages",
+   stars:4, ll:"walkup", llNote:"Walk-up"},
+  {park:"California Adventure", land:"Avengers Campus",
+   name:"Meet the Avengers (Character Meet)", type:"Show",
+   jack:true, jackNote:"All ages",
+   dillon:true, dillonNote:"All ages",
+   stars:5, ll:"walkup", llNote:"Walk-up queue"},
 
-  {park:"Disneyland", land:"Fantasyland", name:"Peter Pan's Flight", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:5, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"Disneyland", land:"Fantasyland", name:"Dumbo the Flying Elephant", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:5, ll:"none", llNote:"Walk-up"},
-  {park:"Disneyland", land:"Fantasyland", name:"The Many Adventures of Winnie the Pooh", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:4, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"Disneyland", land:"Fantasyland", name:"It's a Small World", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:4, ll:"none", llNote:"Walk-up"},
-  {park:"Disneyland", land:"Fantasyland", name:"Alice in Wonderland", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:3, ll:"none", llNote:"Walk-up"},
-  {park:"Disneyland", land:"Fantasyland", name:"Mr. Toad's Wild Ride", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:3, ll:"none", llNote:"Walk-up"},
-  {park:"Disneyland", land:"Fantasyland", name:"Snow White's Enchanted Wish", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:3, ll:"none", llNote:"Walk-up"},
-  {park:"Disneyland", land:"Fantasyland", name:"Pinocchio's Daring Journey", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:3, ll:"none", llNote:"Walk-up"},
-  {park:"Disneyland", land:"Fantasyland", name:"Casey Jr. Circus Train", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:3, ll:"none", llNote:"Walk-up"},
-  {park:"Disneyland", land:"Fantasyland", name:"Storybook Land Canal Boats", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:3, ll:"none", llNote:"Walk-up"},
-  {park:"Disneyland", land:"Fantasyland", name:"Matterhorn Bobsleds", type:"Ride", jack:true, jackNote:"✓ 35\"+ (48\")", dillon:true, dillonNote:"✓ 35\"+ (38\")", stars:3, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"Disneyland", land:"Fantasyland", name:"Bibbidi Bobbidi Boutique", type:"Play", jack:true, jackNote:"✓ All ages", dillon:true, dillonNote:"✓ All ages", stars:2, ll:"none", llNote:"N/A (upcharge)"},
-  {park:"Disneyland", land:"Tomorrowland", name:"Buzz Lightyear Astro Blasters", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:5, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"Disneyland", land:"Tomorrowland", name:"Finding Nemo Submarine Voyage", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:3, ll:"none", llNote:"Walk-up"},
-  {park:"Disneyland", land:"Tomorrowland", name:"Space Mountain", type:"Ride", jack:true, jackNote:"✓ 40\"+ (48\")", dillon:false, dillonNote:"✗ Need 40\" (38\")", stars:3, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"Disneyland", land:"Tomorrowland", name:"Autopia", type:"Ride", jack:true, jackNote:"✓ Any height (must be 54\" to drive solo; adult drives)", dillon:true, dillonNote:"✓ Any height (adult drives)", stars:3, ll:"none", llNote:"Walk-up"},
-  {park:"Disneyland", land:"Tomorrowland", name:"Star Wars: Hyperspace Mountain (seasonal)", type:"Ride", jack:true, jackNote:"✓ 40\"+ (48\")", dillon:false, dillonNote:"✗ Need 40\" (38\")", stars:2, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"Disneyland", land:"Tomorrowland", name:"Tomorrowland Monorail Station", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:3, ll:"none", llNote:"Walk-up"},
-  {park:"Disneyland", land:"Tomorrowland", name:"Little Green Men Store Command (Buzz area play)", type:"Play", jack:true, jackNote:"✓ All ages", dillon:true, dillonNote:"✓ All ages", stars:2, ll:"none", llNote:"N/A"},
-  {park:"Disneyland", land:"Adventureland", name:"Indiana Jones Adventure", type:"Ride", jack:true, jackNote:"✓ 46\"+ (48\")", dillon:false, dillonNote:"✗ Need 46\" (38\")", stars:3, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"Disneyland", land:"Adventureland", name:"Jungle Cruise", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:4, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"Disneyland", land:"Adventureland", name:"Tarzan's Treehouse", type:"Play", jack:true, jackNote:"✓ All ages", dillon:true, dillonNote:"✓ All ages", stars:3, ll:"none", llNote:"N/A"},
-  {park:"Disneyland", land:"Adventureland", name:"Enchanted Tiki Room", type:"Show", jack:true, jackNote:"✓ All ages", dillon:true, dillonNote:"✓ All ages", stars:3, ll:"none", llNote:"Walk-up"},
-  {park:"Disneyland", land:"New Orleans Square", name:"Pirates of the Caribbean", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:5, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"Disneyland", land:"New Orleans Square", name:"Haunted Mansion", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height (may be scary)", stars:4, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"Disneyland", land:"New Orleans Square", name:"Royal Street Backlot (Jazz)", type:"Show", jack:true, jackNote:"✓ All ages", dillon:true, dillonNote:"✓ All ages", stars:2, ll:"none", llNote:"Walk-up"},
-  {park:"Disneyland", land:"Frontierland", name:"Big Thunder Mountain Railroad", type:"Ride", jack:true, jackNote:"✓ 40\"+ (48\")", dillon:true, dillonNote:"✓ 40\"+ (38\")", stars:5, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"Disneyland", land:"Frontierland", name:"Tom Sawyer Island", type:"Play", jack:true, jackNote:"✓ All ages", dillon:true, dillonNote:"✓ All ages", stars:4, ll:"none", llNote:"N/A"},
-  {park:"Disneyland", land:"Frontierland", name:"Sailing Ship Columbia / Mark Twain Riverboat", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:3, ll:"none", llNote:"Walk-up"},
-  {park:"Disneyland", land:"Frontierland", name:"Stage Door Café", type:"Dining", jack:true, jackNote:"", dillon:true, dillonNote:"", stars:3, ll:"MO", llNote:"Mobile Order"},
-  {park:"Disneyland", land:"Main Street U.S.A.", name:"Disneyland Railroad", type:"Ride", jack:true, jackNote:"✓ Any height", dillon:true, dillonNote:"✓ Any height", stars:4, ll:"none", llNote:"Walk-up"},
-  {park:"Disneyland", land:"Main Street U.S.A.", name:"Great Moments with Mr. Lincoln", type:"Show", jack:true, jackNote:"✓ All ages", dillon:true, dillonNote:"✓ All ages", stars:2, ll:"none", llNote:"Walk-up"},
-  {park:"Disneyland", land:"Main Street U.S.A.", name:"Main Street Cinema", type:"Show", jack:true, jackNote:"✓ All ages", dillon:true, dillonNote:"✓ All ages", stars:2, ll:"none", llNote:"Walk-up"},
-  {park:"Disneyland", land:"Main Street U.S.A.", name:"Carnation Café", type:"Dining", jack:true, jackNote:"", dillon:true, dillonNote:"", stars:3, ll:"none", llNote:"Walk-up only"},
-  {park:"Disneyland", land:"Main Street U.S.A.", name:"Gibson Girl Ice Cream Parlor", type:"Dining", jack:true, jackNote:"", dillon:true, dillonNote:"", stars:4, ll:"none", llNote:"Walk-up only"},
-  {park:"Disneyland", land:"Main Street U.S.A.", name:"Little Red Wagon (corn dogs)", type:"Dining", jack:true, jackNote:"", dillon:true, dillonNote:"", stars:4, ll:"none", llNote:"Walk-up only"},
-  {park:"Disneyland", land:"Star Wars: Galaxy's Edge", name:"Millennium Falcon: Smugglers Run", type:"Ride", jack:true, jackNote:"✓ 38\"+ (48\")", dillon:true, dillonNote:"✓ 38\"+ (38\" – at limit)", stars:4, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"Disneyland", land:"Star Wars: Galaxy's Edge", name:"Star Wars: Rise of the Resistance", type:"Ride", jack:true, jackNote:"✓ 40\"+ (48\")", dillon:true, dillonNote:"✓ 40\"+ (38\")", stars:4, ll:"LLMP", llNote:"Lightning Lane Multi Pass"},
-  {park:"Disneyland", land:"Star Wars: Galaxy's Edge", name:"Droid Depot (build-a-droid)", type:"Play", jack:true, jackNote:"✓ All ages", dillon:true, dillonNote:"✓ All ages", stars:4, ll:"none", llNote:"N/A (upcharge)"},
-  {park:"Disneyland", land:"Star Wars: Galaxy's Edge", name:"Oga's Cantina (walk-up)", type:"Dining", jack:true, jackNote:"", dillon:true, dillonNote:"", stars:3, ll:"none", llNote:"Walk-up (limited queue)"},
-  {park:"Disneyland", land:"Star Wars: Galaxy's Edge", name:"Ronto Roasters", type:"Dining", jack:true, jackNote:"", dillon:true, dillonNote:"", stars:4, ll:"MO", llNote:"Mobile Order"},
-  {park:"Disneyland", land:"Star Wars: Galaxy's Edge", name:"Milk Stand", type:"Dining", jack:true, jackNote:"", dillon:true, dillonNote:"", stars:3, ll:"none", llNote:"Walk-up"},
+  {park:"California Adventure", land:"Cars Land",
+   name:"Radiator Springs Racers", type:"Ride",
+   jack:true,  jackNote:"40\"+ req · Jack: 48\" ✓",
+   dillon:true, dillonNote:"40\"+ req · Dillon: 38\" ✓",
+   stars:5, ll:"llmp", llNote:"Lightning Lane Multi Pass"},
+  {park:"California Adventure", land:"Cars Land",
+   name:"Mater's Junkyard Jamboree", type:"Ride",
+   jack:true,  jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:5, ll:"llmp", llNote:"Lightning Lane Multi Pass"},
+  {park:"California Adventure", land:"Cars Land",
+   name:"Luigi's Rollickin' Roadsters", type:"Ride",
+   jack:true,  jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:4, ll:"walkup", llNote:"Walk-up (no LLMP)"},
+  {park:"California Adventure", land:"Cars Land",
+   name:"Cozy Cone Motel", type:"Dining",
+   jack:true, jackNote:"", dillon:true, dillonNote:"",
+   stars:4, ll:"mo", llNote:"Mobile Order"},
+  {park:"California Adventure", land:"Cars Land",
+   name:"Flo's V8 Café", type:"Dining",
+   jack:true, jackNote:"", dillon:true, dillonNote:"",
+   stars:3, ll:"mo", llNote:"Mobile Order"},
+
+  {park:"California Adventure", land:"Pixar Pier",
+   name:"Incredicoaster", type:"Ride",
+   jack:true,  jackNote:"48\"+ req · Jack: 48\" ✓ (just makes it!)",
+   dillon:false, dillonNote:"48\"+ req · Dillon: 38\" ✗",
+   stars:3, ll:"llmp", llNote:"Lightning Lane Multi Pass"},
+  {park:"California Adventure", land:"Pixar Pier",
+   name:"Jessie's Critter Carousel", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:3, ll:"walkup", llNote:"Walk-up"},
+  {park:"California Adventure", land:"Pixar Pier",
+   name:"Inside Out Emotional Whirlwind", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:4, ll:"llmp", llNote:"Lightning Lane Multi Pass"},
+  {park:"California Adventure", land:"Pixar Pier",
+   name:"Toy Story Midway Mania!", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:5, ll:"llmp", llNote:"Lightning Lane Multi Pass"},
+  {park:"California Adventure", land:"Pixar Pier",
+   name:"Pixar Pal-A-Round – Non-Swinging", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:3, ll:"walkup", llNote:"Walk-up"},
+  {park:"California Adventure", land:"Pixar Pier",
+   name:"Pixar Pal-A-Round – Swinging", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:2, ll:"walkup", llNote:"Walk-up"},
+  {park:"California Adventure", land:"Pixar Pier",
+   name:"Lamplight Lounge (walk-up bar)", type:"Dining",
+   jack:true, jackNote:"", dillon:true, dillonNote:"",
+   stars:3, ll:"walkup", llNote:"Walk-up only"},
+
+  {park:"California Adventure", land:"Grizzly Peak",
+   name:"Soarin' Around the World", type:"Ride",
+   jack:true,  jackNote:"40\"+ req · Jack: 48\" ✓",
+   dillon:true, dillonNote:"40\"+ req · Dillon: 38\" ✓",
+   stars:5, ll:"llmp", llNote:"Lightning Lane Multi Pass"},
+  {park:"California Adventure", land:"Grizzly Peak",
+   name:"Grizzly River Run", type:"Ride",
+   jack:true,  jackNote:"42\"+ req · Jack: 48\" ✓",
+   dillon:false, dillonNote:"42\"+ req · Dillon: 38\" ✗",
+   stars:3, ll:"walkup", llNote:"Walk-up"},
+  {park:"California Adventure", land:"Grizzly Peak",
+   name:"Redwood Creek Challenge Trail", type:"Play",
+   jack:true, jackNote:"All ages",
+   dillon:true, dillonNote:"All ages",
+   stars:4, ll:"walkup", llNote:"N/A"},
+
+  {park:"California Adventure", land:"Hollywood Land",
+   name:"Mickey's PhilharMagic", type:"Show",
+   jack:true, jackNote:"All ages",
+   dillon:true, dillonNote:"All ages",
+   stars:4, ll:"walkup", llNote:"Walk-up"},
+  {park:"California Adventure", land:"Hollywood Land",
+   name:"Monsters, Inc. Mike & Sulley to the Rescue!", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:3, ll:"walkup", llNote:"Walk-up"},
+  {park:"California Adventure", land:"Hollywood Land",
+   name:"Hyperion Theater (seasonal shows)", type:"Show",
+   jack:true, jackNote:"All ages",
+   dillon:true, dillonNote:"All ages",
+   stars:3, ll:"walkup", llNote:"Walk-up"},
+  {park:"California Adventure", land:"Hollywood Land",
+   name:"Award Wieners", type:"Dining",
+   jack:true, jackNote:"", dillon:true, dillonNote:"",
+   stars:3, ll:"mo", llNote:"Mobile Order"},
+
+  {park:"California Adventure", land:"Buena Vista Street",
+   name:"Fiddler, Fifer & Practical Café", type:"Dining",
+   jack:true, jackNote:"", dillon:true, dillonNote:"",
+   stars:3, ll:"mo", llNote:"Mobile Order"},
+  {park:"California Adventure", land:"Buena Vista Street",
+   name:"Carthay Circle Lounge (walk-up bar)", type:"Dining",
+   jack:true, jackNote:"", dillon:true, dillonNote:"",
+   stars:3, ll:"walkup", llNote:"Walk-up"},
+
+  {park:"California Adventure", land:"Pacific Wharf",
+   name:"Pacific Wharf Café", type:"Dining",
+   jack:true, jackNote:"", dillon:true, dillonNote:"",
+   stars:3, ll:"mo", llNote:"Mobile Order"},
+  {park:"California Adventure", land:"Pacific Wharf",
+   name:"Lucky Fortune Cookery", type:"Dining",
+   jack:true, jackNote:"", dillon:true, dillonNote:"",
+   stars:3, ll:"mo", llNote:"Mobile Order"},
+
+  // ── Disneyland ───────────────────────────────────────────────────
+  {park:"Disneyland", land:"Fantasyland",
+   name:"Peter Pan's Flight", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:5, ll:"llmp", llNote:"Lightning Lane Multi Pass"},
+  {park:"Disneyland", land:"Fantasyland",
+   name:"Dumbo the Flying Elephant", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:5, ll:"walkup", llNote:"Walk-up"},
+  {park:"Disneyland", land:"Fantasyland",
+   name:"The Many Adventures of Winnie the Pooh", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:4, ll:"llmp", llNote:"Lightning Lane Multi Pass"},
+  {park:"Disneyland", land:"Fantasyland",
+   name:"It's a Small World", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:4, ll:"walkup", llNote:"Walk-up"},
+  {park:"Disneyland", land:"Fantasyland",
+   name:"Alice in Wonderland", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:3, ll:"walkup", llNote:"Walk-up"},
+  {park:"Disneyland", land:"Fantasyland",
+   name:"Mr. Toad's Wild Ride", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:3, ll:"walkup", llNote:"Walk-up"},
+  {park:"Disneyland", land:"Fantasyland",
+   name:"Snow White's Enchanted Wish", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:3, ll:"walkup", llNote:"Walk-up"},
+  {park:"Disneyland", land:"Fantasyland",
+   name:"Pinocchio's Daring Journey", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:3, ll:"walkup", llNote:"Walk-up"},
+  {park:"Disneyland", land:"Fantasyland",
+   name:"Casey Jr. Circus Train", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:3, ll:"walkup", llNote:"Walk-up"},
+  {park:"Disneyland", land:"Fantasyland",
+   name:"Storybook Land Canal Boats", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:3, ll:"walkup", llNote:"Walk-up"},
+  {park:"Disneyland", land:"Fantasyland",
+   name:"Matterhorn Bobsleds", type:"Ride",
+   jack:true,  jackNote:"35\"+ req · Jack: 48\" ✓",
+   dillon:true, dillonNote:"35\"+ req · Dillon: 38\" ✓ (can be intense)",
+   stars:3, ll:"llmp", llNote:"Lightning Lane Multi Pass"},
+  {park:"Disneyland", land:"Fantasyland",
+   name:"Bibbidi Bobbidi Boutique", type:"Play",
+   jack:true, jackNote:"All ages",
+   dillon:true, dillonNote:"All ages",
+   stars:2, ll:"walkup", llNote:"N/A (upcharge)"},
+
+  {park:"Disneyland", land:"Tomorrowland",
+   name:"Buzz Lightyear Astro Blasters", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:5, ll:"llmp", llNote:"Lightning Lane Multi Pass"},
+  {park:"Disneyland", land:"Tomorrowland",
+   name:"Finding Nemo Submarine Voyage", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:3, ll:"walkup", llNote:"Walk-up"},
+  {park:"Disneyland", land:"Tomorrowland",
+   name:"Space Mountain", type:"Ride",
+   jack:true,  jackNote:"40\"+ req · Jack: 48\" ✓",
+   dillon:false, dillonNote:"40\"+ req · Dillon: 38\" ✗",
+   stars:3, ll:"llmp", llNote:"Lightning Lane Multi Pass"},
+  {park:"Disneyland", land:"Tomorrowland",
+   name:"Autopia", type:"Ride",
+   jack:true,  jackNote:"Any height (adult drives)",
+   dillon:true, dillonNote:"Any height (adult drives)",
+   stars:3, ll:"walkup", llNote:"Walk-up"},
+  {park:"Disneyland", land:"Tomorrowland",
+   name:"Tomorrowland Monorail Station", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:3, ll:"walkup", llNote:"Walk-up"},
+
+  {park:"Disneyland", land:"Adventureland",
+   name:"Indiana Jones Adventure", type:"Ride",
+   jack:true,  jackNote:"46\"+ req · Jack: 48\" ✓",
+   dillon:false, dillonNote:"46\"+ req · Dillon: 38\" ✗",
+   stars:3, ll:"llmp", llNote:"Lightning Lane Multi Pass"},
+  {park:"Disneyland", land:"Adventureland",
+   name:"Jungle Cruise", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:4, ll:"llmp", llNote:"Lightning Lane Multi Pass"},
+  {park:"Disneyland", land:"Adventureland",
+   name:"Tarzan's Treehouse", type:"Play",
+   jack:true, jackNote:"All ages",
+   dillon:true, dillonNote:"All ages",
+   stars:3, ll:"walkup", llNote:"N/A"},
+  {park:"Disneyland", land:"Adventureland",
+   name:"Enchanted Tiki Room", type:"Show",
+   jack:true, jackNote:"All ages",
+   dillon:true, dillonNote:"All ages",
+   stars:3, ll:"walkup", llNote:"Walk-up"},
+
+  {park:"Disneyland", land:"New Orleans Square",
+   name:"Pirates of the Caribbean", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:5, ll:"llmp", llNote:"Lightning Lane Multi Pass"},
+  {park:"Disneyland", land:"New Orleans Square",
+   name:"Haunted Mansion", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height (may be scary)",
+   stars:4, ll:"llmp", llNote:"Lightning Lane Multi Pass"},
+  {park:"Disneyland", land:"New Orleans Square",
+   name:"Royal Street Backlot (Jazz)", type:"Show",
+   jack:true, jackNote:"All ages",
+   dillon:true, dillonNote:"All ages",
+   stars:2, ll:"walkup", llNote:"Walk-up"},
+
+  {park:"Disneyland", land:"Frontierland",
+   name:"Big Thunder Mountain Railroad", type:"Ride",
+   jack:true,  jackNote:"40\"+ req · Jack: 48\" ✓",
+   dillon:true, dillonNote:"40\"+ req · Dillon: 38\" ✓",
+   stars:5, ll:"llmp", llNote:"Lightning Lane Multi Pass"},
+  {park:"Disneyland", land:"Frontierland",
+   name:"Tom Sawyer Island", type:"Play",
+   jack:true, jackNote:"All ages",
+   dillon:true, dillonNote:"All ages",
+   stars:4, ll:"walkup", llNote:"N/A"},
+  {park:"Disneyland", land:"Frontierland",
+   name:"Sailing Ship Columbia / Mark Twain Riverboat", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:3, ll:"walkup", llNote:"Walk-up"},
+  {park:"Disneyland", land:"Frontierland",
+   name:"Stage Door Café", type:"Dining",
+   jack:true, jackNote:"", dillon:true, dillonNote:"",
+   stars:3, ll:"mo", llNote:"Mobile Order"},
+
+  {park:"Disneyland", land:"Main Street U.S.A.",
+   name:"Disneyland Railroad", type:"Ride",
+   jack:true, jackNote:"Any height",
+   dillon:true, dillonNote:"Any height",
+   stars:4, ll:"walkup", llNote:"Walk-up"},
+  {park:"Disneyland", land:"Main Street U.S.A.",
+   name:"Great Moments with Mr. Lincoln", type:"Show",
+   jack:true, jackNote:"All ages",
+   dillon:true, dillonNote:"All ages",
+   stars:2, ll:"walkup", llNote:"Walk-up"},
+  {park:"Disneyland", land:"Main Street U.S.A.",
+   name:"Main Street Cinema", type:"Show",
+   jack:true, jackNote:"All ages",
+   dillon:true, dillonNote:"All ages",
+   stars:2, ll:"walkup", llNote:"Walk-up"},
+  {park:"Disneyland", land:"Main Street U.S.A.",
+   name:"Gibson Girl Ice Cream Parlor", type:"Dining",
+   jack:true, jackNote:"", dillon:true, dillonNote:"",
+   stars:4, ll:"walkup", llNote:"Walk-up only"},
+  {park:"Disneyland", land:"Main Street U.S.A.",
+   name:"Little Red Wagon (corn dogs)", type:"Dining",
+   jack:true, jackNote:"", dillon:true, dillonNote:"",
+   stars:4, ll:"walkup", llNote:"Walk-up only"},
+  {park:"Disneyland", land:"Main Street U.S.A.",
+   name:"Carnation Café", type:"Dining",
+   jack:true, jackNote:"", dillon:true, dillonNote:"",
+   stars:3, ll:"walkup", llNote:"Walk-up only"},
+
+  {park:"Disneyland", land:"Star Wars: Galaxy's Edge",
+   name:"Millennium Falcon: Smugglers Run", type:"Ride",
+   jack:true,  jackNote:"38\"+ req · Jack: 48\" ✓",
+   dillon:true, dillonNote:"38\"+ req · Dillon: 38\" ✓ (at limit!)",
+   stars:4, ll:"llmp", llNote:"Lightning Lane Multi Pass"},
+  {park:"Disneyland", land:"Star Wars: Galaxy's Edge",
+   name:"Star Wars: Rise of the Resistance", type:"Ride",
+   jack:true,  jackNote:"40\"+ req · Jack: 48\" ✓",
+   dillon:true, dillonNote:"40\"+ req · Dillon: 38\" ✓",
+   stars:4, ll:"llmp", llNote:"Lightning Lane Multi Pass"},
+  {park:"Disneyland", land:"Star Wars: Galaxy's Edge",
+   name:"Droid Depot (build-a-droid)", type:"Play",
+   jack:true, jackNote:"All ages",
+   dillon:true, dillonNote:"All ages",
+   stars:4, ll:"walkup", llNote:"N/A (upcharge)"},
+  {park:"Disneyland", land:"Star Wars: Galaxy's Edge",
+   name:"Ronto Roasters", type:"Dining",
+   jack:true, jackNote:"", dillon:true, dillonNote:"",
+   stars:4, ll:"mo", llNote:"Mobile Order"},
+  {park:"Disneyland", land:"Star Wars: Galaxy's Edge",
+   name:"Milk Stand", type:"Dining",
+   jack:true, jackNote:"", dillon:true, dillonNote:"",
+   stars:3, ll:"walkup", llNote:"Walk-up"},
+  {park:"Disneyland", land:"Star Wars: Galaxy's Edge",
+   name:"Oga's Cantina (walk-up)", type:"Dining",
+   jack:true, jackNote:"", dillon:true, dillonNote:"",
+   stars:3, ll:"walkup", llNote:"Walk-up (limited queue)"},
 ];
 
-function stars(n) {
-  return '<span class="stars">' + '★'.repeat(n) + '<span style="color:var(--color-border-secondary);">' + '★'.repeat(5-n) + '</span></span>';
+// SVG star helper
+function starSVG(on) {
+  const fill = on ? 'var(--gold)' : 'var(--gray-2)';
+  return `<svg class="star ${on?'on':'off'}" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" width="13" height="13"><path d="M8 1l1.85 3.75L14 5.5l-3 2.92.71 4.13L8 10.5l-3.71 2.05L5 8.42 2 5.5l4.15-.75L8 1z" fill="${fill}"/></svg>`;
 }
-function check(ok, note) {
-  return '<span class="' + (ok?'check':'cross') + '">' + (ok?'✔':'✗') + '</span><span class="note">' + note + '</span>';
+function starsHtml(n) {
+  let s = '<div class="stars-wrap">';
+  for(let i=1;i<=5;i++) s += starSVG(i<=n);
+  s += '</div>';
+  return s;
 }
-function llBadge(ll, note) {
-  if(ll==='LLMP') return '<span class="ll-badge">⚡ LLMP</span><span class="note">' + note + '</span>';
-  if(ll==='MO') return '<span class="ll-badge mo">📱 Mobile Order</span>';
-  return '<span class="ll-badge none">Walk-up</span>';
+function checkHtml(ok, note) {
+  return `<div class="check-wrap"><span class="check ${ok?'yes':'no'}">${ok?'✔':'✗'}</span>${note?`<span class="check-note">${note}</span>`:''}</div>`;
 }
-function typeLabel(t) {
-  let cls = t==='Play'?'type-Play':('type-'+t);
-  let label = t==='Play'?'Play Area':t;
-  return '<span class="type-badge ' + cls + '">' + label + '</span>';
+function llHtml(ll, note) {
+  if(ll==='llmp') return `<span class="ll-tag llmp">⚡ LLMP</span><span class="ll-sub">${note}</span>`;
+  if(ll==='mo')   return `<span class="ll-tag mo">📱 Mobile Order</span>`;
+  return `<span class="ll-tag walkup">Walk-up</span>`;
 }
 
 let activeFilter = 'all';
 
+function passes(r) {
+  if(activeFilter==='all')    return true;
+  if(activeFilter==='Ride')   return r.type==='Ride';
+  if(activeFilter==='Show')   return r.type==='Show';
+  if(activeFilter==='Play')   return r.type==='Play';
+  if(activeFilter==='Dining') return r.type==='Dining';
+  if(activeFilter==='both')   return r.jack && r.dillon;
+  if(activeFilter==='ll')     return r.ll==='llmp';
+  if(activeFilter==='5star')  return r.stars===5;
+  return true;
+}
+
 function render() {
   const parks = ['California Adventure','Disneyland'];
+  const parkMeta = {
+    'California Adventure': {cls:'dca', icon:'🎡'},
+    'Disneyland':            {cls:'dl',  icon:'🏰'},
+  };
   let html = '';
-  let shown = 0, total = 0;
+  let totalShown = 0, totalBoth = 0, totalLL = 0;
 
   parks.forEach(park => {
-    const lands = [...new Set(data.filter(d=>d.park===park).map(d=>d.land))];
+    const lands = [...new Set(DATA.filter(d=>d.park===park).map(d=>d.land))];
     let parkHtml = '';
-    let parkShown = 0;
+    let parkHasRows = false;
 
     lands.forEach(land => {
-      const rows = data.filter(d => d.park===park && d.land===land);
-      const filtered = rows.filter(r => {
-        if(activeFilter==='all') return true;
-        if(activeFilter==='Ride') return r.type==='Ride';
-        if(activeFilter==='Show') return r.type==='Show';
-        if(activeFilter==='Play') return r.type==='Play';
-        if(activeFilter==='Dining') return r.type==='Dining';
-        if(activeFilter==='both') return r.jack && r.dillon;
-        if(activeFilter==='ll') return r.ll==='LLMP';
-        if(activeFilter==='5star') return r.stars===5;
-        return true;
-      });
-      if(!filtered.length) return;
-      parkShown += filtered.length;
-      shown += filtered.length;
+      const rows = DATA.filter(d=>d.park===park && d.land===land && passes(d));
+      if(!rows.length) return;
+      parkHasRows = true;
 
-      parkHtml += '<div class="land-header">' + land + '</div>';
-      parkHtml += '<table><thead><tr>';
-      parkHtml += '<th class="col-name">Attraction</th><th class="col-type">Type</th>';
-      parkHtml += '<th class="col-j">Jack (6.5, 48")</th><th class="col-d">Dillon (4, 38")</th>';
-      parkHtml += '<th class="col-star">Family ★</th><th class="col-ll">Skip-Line / Order</th>';
-      parkHtml += '</tr></thead><tbody>';
-      filtered.forEach(r => {
-        total++;
-        parkHtml += '<tr>';
-        parkHtml += '<td style="font-weight:500;">' + r.name + '</td>';
-        parkHtml += '<td>' + typeLabel(r.type) + '</td>';
-        parkHtml += '<td>' + check(r.jack, r.jackNote) + '</td>';
-        parkHtml += '<td>' + check(r.dillon, r.dillonNote) + '</td>';
-        parkHtml += '<td>' + stars(r.stars) + '</td>';
-        parkHtml += '<td>' + llBadge(r.ll, r.llNote) + '</td>';
-        parkHtml += '</tr>';
+      let tableRows = '';
+      rows.forEach(r => {
+        totalShown++;
+        if(r.jack && r.dillon) totalBoth++;
+        if(r.ll==='llmp') totalLL++;
+        tableRows += `<tr>
+          <td><div class="attr-name">${r.name}</div></td>
+          <td><span class="badge badge-${r.type}">${r.type==='Play'?'Play Area':r.type}</span></td>
+          <td>${checkHtml(r.jack, r.jackNote)}</td>
+          <td>${checkHtml(r.dillon, r.dillonNote)}</td>
+          <td>${starsHtml(r.stars)}</td>
+          <td>${llHtml(r.ll, r.llNote)}</td>
+        </tr>`;
       });
-      parkHtml += '</tbody></table>';
+
+      parkHtml += `
+      <div class="land-block">
+        <div class="land-label">${land}</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th class="col-name">Attraction</th>
+              <th class="col-type">Type</th>
+              <th class="col-jack">Jack · 6.5 · 48"</th>
+              <th class="col-dill">Dillon · 4 · 38"</th>
+              <th class="col-star">Rating</th>
+              <th class="col-ll col-ll-th">Skip-Line / Order</th>
+            </tr></thead>
+            <tbody>${tableRows}</tbody>
+          </table>
+        </div>
+      </div>`;
     });
 
-    if(parkShown > 0) {
-      html += '<div class="park-header">' + (park==='California Adventure'?'🎡':'🏰') + ' ' + park + '</div>';
-      html += parkHtml;
+    if(parkHasRows) {
+      const m = parkMeta[park];
+      html += `<div class="park-section">
+        <div class="park-heading ${m.cls}">
+          <span class="park-icon">${m.icon}</span>${park}
+        </div>
+        ${parkHtml}
+      </div>`;
     }
   });
 
-  document.getElementById('content').innerHTML = html;
+  if(!html) {
+    html = `<div class="no-results"><span>🎢</span>No attractions match this filter.</div>`;
+  }
 
-  const llCount = data.filter(r=>{
-    let ok = activeFilter==='all'||
-      (activeFilter==='Ride'&&r.type==='Ride')||(activeFilter==='Show'&&r.type==='Show')||
-      (activeFilter==='Play'&&r.type==='Play')||(activeFilter==='Dining'&&r.type==='Dining')||
-      (activeFilter==='both'&&r.jack&&r.dillon)||(activeFilter==='ll'&&r.ll==='LLMP')||
-      (activeFilter==='5star'&&r.stars===5);
-    return ok && r.ll==='LLMP';
-  }).length;
-  const bothCount = data.filter(r=>{
-    let ok = activeFilter==='all'||(activeFilter==='Ride'&&r.type==='Ride')||(activeFilter==='Show'&&r.type==='Show')||
-      (activeFilter==='Play'&&r.type==='Play')||(activeFilter==='Dining'&&r.type==='Dining')||
-      (activeFilter==='both'&&r.jack&&r.dillon)||(activeFilter==='ll'&&r.ll==='LLMP')||
-      (activeFilter==='5star'&&r.stars===5);
-    return ok && r.jack && r.dillon;
-  }).length;
+  document.getElementById('parks').innerHTML = html;
 
-  document.getElementById('summary').innerHTML =
-    '<span class="stat">Showing <b>' + shown + '</b> attractions</span>' +
-    '<span class="stat"><b>' + bothCount + '</b> both kids can do</span>' +
-    '<span class="stat"><b>' + llCount + '</b> Lightning Lane eligible</span>';
+  document.getElementById('summary').innerHTML = `
+    <div class="summary-pill">Showing <b>${totalShown}</b> attractions</div>
+    <div class="summary-pill"><b>${totalBoth}</b> both kids can ride/do</div>
+    <div class="summary-pill"><b>${totalLL}</b> Lightning Lane Multi Pass eligible</div>
+  `;
 }
 
-document.getElementById('filters').addEventListener('click', function(e) {
-  if(e.target.tagName!=='BUTTON') return;
-  document.querySelectorAll('#filters button').forEach(b=>b.classList.remove('active'));
-  e.target.classList.add('active');
-  activeFilter = e.target.dataset.f;
-  render();
+// Filter clicks
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.f;
+    render();
+  });
 });
 
 render();
 </script>
-
+</body>
+</html>
